@@ -1,0 +1,12 @@
+{
+  "name": "Pan Asia EZY Meet",
+  "short_name": "EZY Meet",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#14125e",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-280.png", "sizes": "280x280", "type": "image/png" }
+  ]
+}
