@@ -2,12 +2,10 @@ import { useState } from 'react'
 import {
   ArrowLeftRight,
   Bell,
-  CalendarCheck2,
   CalendarClock,
   ChevronDown,
   ClipboardList,
   CreditCard,
-  Ellipsis,
   Eye,
   EyeOff,
   Gem,
@@ -16,18 +14,15 @@ import {
   Mail,
   PiggyBank,
   Receipt,
-  Settings2,
   Share2,
   Smartphone,
   TrafficCone,
-  Video,
 } from 'lucide-react'
 import { upcomingAppointments, useApp } from '../store'
-import { BottomNav } from '../components/ui'
+import { BottomNav, NavRow } from '../components/ui'
 import { getBranch } from '../data/branches'
 import { getService, getTopic } from '../data/services'
 import { whenLabel } from '../data/slots'
-import logo from '../assets/ezy-logo.png'
 
 export default function Home() {
   const { push, toast, appointments } = useApp()
@@ -42,13 +37,13 @@ export default function Home() {
     { label: 'Gov Pay', icon: Landmark },
     { label: 'Mobile Reloads', icon: Smartphone },
     { label: 'Pawning Services', icon: Gem },
-    { label: 'EZY Meet', icon: CalendarClock, meet: true },
+    { label: 'EZY Meet', icon: CalendarClock, go: openMeet },
     { label: 'Open FD', icon: PiggyBank },
     { label: 'Service Requests', icon: ClipboardList },
   ]
 
   return (
-    <div className="view">
+    <div className="view home">
       <div className="view__scroll">
         <div className="home-head">
           <div className="profile">
@@ -58,9 +53,9 @@ export default function Home() {
               <span>Privilege Club</span>
             </div>
             <div className="profile__icons">
-              <button aria-label="Favourites" onClick={soon}><Heart size={21} /></button>
-              <button aria-label="Notifications" onClick={soon}><Bell size={21} /><span className="dot" /></button>
-              <button aria-label="Messages" onClick={soon}><Mail size={21} /><span className="dot" /></button>
+              <button aria-label="Favourites" onClick={soon}><Heart size={22} strokeWidth={1.7} /></button>
+              <button aria-label="Notifications" onClick={soon}><Bell size={22} strokeWidth={1.7} /><span className="dot" /></button>
+              <button aria-label="Messages" onClick={soon}><Mail size={22} strokeWidth={1.7} /></button>
             </div>
           </div>
           <div className="chips">
@@ -71,15 +66,10 @@ export default function Home() {
         </div>
 
         <div className="balance">
-          <div className="balance__top">
-            <span>Available Balance</span>
-            <ChevronDown size={18} />
-          </div>
+          <div className="balance__top"><span>Available Balance</span><ChevronDown size={18} /></div>
           <div className="balance__amt">
             {hidden ? 'LKR ••••••••' : 'LKR 248,750.00'}
-            <button aria-label="Toggle balance" onClick={() => setHidden((h) => !h)} style={{ color: '#fff' }}>
-              {hidden ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
+            <button aria-label="Toggle balance" onClick={() => setHidden((h) => !h)}>{hidden ? <EyeOff size={20} /> : <Eye size={20} />}</button>
           </div>
           <div className="balance__acct">CHAMPION SAVER</div>
           <div className="balance__acct-row">
@@ -93,59 +83,39 @@ export default function Home() {
         </div>
 
         <div className="home-body">
-          {/* EZY Meet widget */}
-          <section className="card meet-card">
-            <div className="meet-card__head">
-              <div className="meet-card__title">
-                <img src={logo} alt="" /> EZY Meet <span className="new-badge">NEW</span>
-              </div>
-              <button className="link" onClick={() => push({ name: 'appointments' })}>View All</button>
+          {/* EZY Meet widget — one tap to the next step */}
+          <section className="card meet-widget">
+            <div className="meet-widget__head">
+              <b>EZY Meet</b>
+              {next && <button onClick={() => push({ name: 'appointments' })}>View All</button>}
             </div>
             {next ? (
-              <button className="appt-mini" onClick={() => push({ name: 'appointments' })}>
-                <span className="appt-mini__icon">{next.kind === 'virtual' ? <Video size={20} /> : <CalendarCheck2 size={20} />}</span>
-                <span className="appt-mini__txt">
-                  <b>{whenLabel(next.dateKey, next.time)}</b>
-                  <span>
-                    {next.kind === 'virtual'
-                      ? `${getTopic(next.serviceId)?.name} · Video call`
-                      : `${getBranch(next.branchId!)?.name} Branch · ${getService(next.serviceId)?.name}`}
-                  </span>
-                </span>
-                <span className="prio">Priority Service</span>
-              </button>
+              <NavRow
+                onClick={() => push({ name: 'appointments' })}
+                title={whenLabel(next.dateKey, next.time)}
+                desc={next.kind === 'virtual' ? `${getTopic(next.serviceId)?.name} · Video call` : `${getBranch(next.branchId!)?.name} Branch · ${getService(next.serviceId)?.name}`}
+                right={next.kind === 'branch' ? <span className="tag">Priority Service</span> : undefined}
+              />
             ) : (
-              <div className="meet-card__cta">
-                <p>
-                  <b>Skip the queue</b>
-                  Book a branch visit or a video call with an advisor in a few taps.
-                </p>
-                <div className="meet-card__art"><CalendarClock size={34} /></div>
-              </div>
+              <NavRow onClick={openMeet} title="Book a branch visit" desc="Pick a service, we'll find the fastest branch" />
             )}
-            <div className="meet-card__actions">
-              <button className="btn" onClick={openMeet}><CalendarClock size={16} /> Book a Visit</button>
-              <button className="btn btn--ghost" onClick={() => push({ name: 'meet', tab: 'virtual' })}><Video size={16} /> Video Call</button>
-            </div>
           </section>
 
           <section className="card grid4">
-            {services.map(({ label, icon: Icon, meet }) => (
-              <button key={label} className={meet ? 'hl' : ''} onClick={meet ? openMeet : soon}>
-                <span className="tile"><Icon size={24} strokeWidth={1.7} /></span>
-                {meet && <span className="new-badge">NEW</span>}
+            {services.map(({ label, icon: Icon, go }) => (
+              <button key={label} onClick={go ?? soon}>
+                <span className="tile"><Icon size={24} strokeWidth={1.6} /></span>
                 {label}
               </button>
             ))}
           </section>
 
           <section className="card quickpay">
-            <div className="quickpay__head">Quick Pay <Settings2 size={18} color="#8a8aa0" /></div>
+            <div className="quickpay__head">Quick Pay</div>
             <div className="quickpay__row">
               {['Amma', 'Dialog', 'CEB', 'Water'].map((n) => (
                 <div key={n}><i>{n.slice(0, 2).toUpperCase()}</i>{n}</div>
               ))}
-              <div><i><Ellipsis size={18} /></i>More</div>
             </div>
           </section>
         </div>

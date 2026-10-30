@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
-import { MapPin, Zap } from 'lucide-react'
 import { useApp } from '../store'
-import { BusyChip, ScreenHeader, Stepper } from '../components/ui'
+import { ScreenHeader } from '../components/ui'
 import SlotPicker from '../components/SlotPicker'
 import ReviewSheet, { type Draft } from '../components/ReviewSheet'
 import { distanceKm, getBranch } from '../data/branches'
@@ -18,7 +17,7 @@ export default function SlotSelect({ serviceId, branchId, rescheduleId }: { serv
   const [value, setValue] = useState<SlotRef | null>(() => earliest(slotsFor))
   const [draft, setDraft] = useState<Draft | null>(null)
 
-  // Smart alternative: a different nearby branch that is at least an hour sooner
+  // Smart alternative: another nearby branch that is at least an hour sooner
   const faster = useMemo(() => {
     const mine = earliest(slotsFor)
     const { recommended } = rankBranches(location)
@@ -31,32 +30,24 @@ export default function SlotSelect({ serviceId, branchId, rescheduleId }: { serv
 
   return (
     <div className="view">
-      <ScreenHeader title="Select Date & Time" />
-      <div style={{ background: '#fff' }}><Stepper step={3} /></div>
+      <ScreenHeader title={`${branch.name} Branch`} />
       <div className="view__scroll">
-        <div className="pad" style={{ paddingBottom: 24 }}>
-          <div className="selected-svc">
-            <span className="tile"><MapPin size={19} /></span>
-            <div>
-              <b>{branch.name} Branch</b>
-              <span>{service.name} · {distanceKm(location, branch).toFixed(1)} km</span>
-            </div>
-            <BusyChip branch={branch} />
-          </div>
+        <div className="body">
+          <p className="context">
+            <b>{service.name}</b> · {distanceKm(location, branch).toFixed(1)} km away
+          </p>
 
           {faster && (
-            <div className="faster">
-              <span className="faster__icon"><Zap size={18} /></span>
-              <div>
-                <b>Faster at {faster.branch.name}</b>
-                {whenLabel(faster.next!.dateKey, faster.next!.slot.time)} · ~{faster.next!.slot.wait} min wait · {faster.distance.toFixed(1)} km
-              </div>
-              <button className="btn btn--sm" onClick={() => replace({ name: 'slot', serviceId, branchId: faster.branch.id, rescheduleId })}>Switch</button>
+            <div className="suggest">
+              <span style={{ flex: 1 }}>
+                <b>{faster.branch.name}</b> is free sooner — {whenLabel(faster.next!.dateKey, faster.next!.slot.time)}, ~{faster.next!.slot.wait} min wait.
+              </span>
+              <button onClick={() => replace({ name: 'slot', serviceId, branchId: faster.branch.id, rescheduleId })}>Switch</button>
             </div>
           )}
 
-          <div className="section-title">Available dates</div>
-          <SlotPicker slotsFor={slotsFor} value={value} onChange={setValue} showWait />
+          <SlotPicker slotsFor={slotsFor} value={value} onChange={setValue} />
+          {ready && <p className="slot-meta">Expected wait at {whenLabel(value.dateKey, value.slot.time)}: ~{value.slot.wait} min</p>}
         </div>
       </div>
       <div className="view__footer">
@@ -65,7 +56,7 @@ export default function SlotSelect({ serviceId, branchId, rescheduleId }: { serv
           disabled={!ready}
           onClick={() => value && setDraft({ kind: 'branch', serviceId, branchId, dateKey: value.dateKey, slot: value.slot })}
         >
-          {ready ? `Continue · ${whenLabel(value.dateKey, value.slot.time)}` : 'Select a time slot'}
+          Next
         </button>
       </div>
       <ReviewSheet draft={draft} onClose={() => setDraft(null)} rescheduleId={rescheduleId} />

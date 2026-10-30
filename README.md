@@ -46,9 +46,12 @@ In Safari on the iPhone, use **Share → Add to Home Screen** for an app-like, f
 
 ## Deploy (GitHub Pages)
 
-The workflow in `.github/workflows/deploy.yml` builds the app and publishes `dist/` to GitHub Pages
-on every push to `main` or `sandeepa/nice-brown-5ounrb`. Before the first run, enable it once:
-**Settings → Pages → Build and deployment → Source: GitHub Actions**.
+On every push to `main` or `sandeepa/nice-brown-5ounrb`, `.github/workflows/deploy.yml` builds the app
+and publishes `dist/` to the `gh-pages` branch. To switch it on once:
+**Settings → Pages → Build and deployment → Source: Deploy from a branch → `gh-pages` / `(root)`**.
+GitHub Pages on a private repository needs a paid GitHub plan; on a free plan, make the repository public.
+
+The live URL is `https://buddhirc5.github.io/ezymeet/`.
 
 ## Tech
 

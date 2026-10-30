@@ -1,133 +1,105 @@
 import { useState } from 'react'
-import { CalendarClock, CalendarPlus, CalendarX, Clock, MapPin, Navigation, Plus, RefreshCw, Video } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
 import { upcomingAppointments, useApp, type Appointment } from '../store'
-import { BottomSheet, ScreenHeader } from '../components/ui'
+import { BottomSheet, NavRow, ScreenHeader, Tabs } from '../components/ui'
 import { addToCalendar } from '../calendar'
 import { directionsUrl, getBranch } from '../data/branches'
 import { getService, getTopic } from '../data/services'
 import { whenLabel } from '../data/slots'
 
+const nameOf = (a: Appointment) => getService(a.serviceId)?.name ?? getTopic(a.serviceId)?.name ?? ''
+const placeOf = (a: Appointment) => (a.branchId ? `${getBranch(a.branchId)?.name} Branch` : 'Video call')
+
 export default function Appointments() {
   const { appointments, push, cancel, toast } = useApp()
   const [tab, setTab] = useState<'upcoming' | 'history'>('upcoming')
-  const [toCancel, setToCancel] = useState<Appointment | null>(null)
-  const [qrFor, setQrFor] = useState<Appointment | null>(null)
+  const [open, setOpen] = useState<Appointment | null>(null)
+  const [confirmCancel, setConfirmCancel] = useState(false)
 
   const upcoming = upcomingAppointments(appointments)
   const history = appointments.filter((a) => !upcoming.includes(a))
   const list = tab === 'upcoming' ? upcoming : history
 
-  const reschedule = (a: Appointment) =>
-    a.kind === 'branch'
-      ? push({ name: 'slot', serviceId: a.serviceId, branchId: a.branchId!, rescheduleId: a.id })
-      : push({ name: 'vbook', topicId: a.serviceId, rescheduleId: a.id })
+  const close = () => {
+    setOpen(null)
+    setConfirmCancel(false)
+  }
+  const reschedule = (a: Appointment) => {
+    close()
+    if (a.kind === 'branch') push({ name: 'slot', serviceId: a.serviceId, branchId: a.branchId!, rescheduleId: a.id })
+    else push({ name: 'vbook', topicId: a.serviceId, rescheduleId: a.id })
+  }
 
   return (
     <div className="view">
-      <ScreenHeader
-        title="My Appointments"
-        right={
-          <button className="icon-btn" aria-label="New appointment" onClick={() => push({ name: 'meet' })}>
-            <Plus size={22} />
-          </button>
-        }
-      />
-      <div className="tabs">
-        <button className={tab === 'upcoming' ? 'on' : ''} onClick={() => setTab('upcoming')}>Upcoming ({upcoming.length})</button>
-        <button className={tab === 'history' ? 'on' : ''} onClick={() => setTab('history')}>History</button>
-      </div>
+      <ScreenHeader title="My Appointments" />
+      <Tabs value={tab} onChange={setTab} options={[['upcoming', 'Upcoming'], ['history', 'History']]} />
       <div className="view__scroll">
-        <div className="pad" style={{ paddingTop: 16, paddingBottom: 28 }}>
+        <div className="body">
           {list.length === 0 && (
-            <div className="empty" style={{ paddingTop: 60 }}>
-              <div className="meet-card__art" style={{ margin: '0 auto 14px' }}><CalendarClock size={34} /></div>
-              {tab === 'upcoming' ? 'No upcoming appointments.' : 'No past appointments yet.'}
-              {tab === 'upcoming' && (
-                <button className="btn" style={{ marginTop: 18 }} onClick={() => push({ name: 'meet' })}>Book an Appointment</button>
-              )}
+            <div className="empty">
+              {tab === 'upcoming' ? 'No upcoming appointments.' : 'Nothing here yet.'}
+              {tab === 'upcoming' && <button className="btn" style={{ marginTop: 20 }} onClick={() => push({ name: 'meet' })}>Book an Appointment</button>}
             </div>
           )}
-          {list.map((a) => {
-            const branch = a.branchId ? getBranch(a.branchId) : undefined
-            const svc = getService(a.serviceId) ?? getTopic(a.serviceId)
-            const Icon = svc?.icon ?? CalendarClock
-            const isUpcoming = upcoming.includes(a)
-            const status = a.status === 'cancelled' ? 'cancelled' : isUpcoming ? 'upcoming' : 'past'
-            return (
-              <section key={a.id} className="card appt">
-                <div className="appt__top">
-                  <span className="tile"><Icon size={21} /></span>
-                  <div>
-                    <b>{svc?.name}</b>
-                    <span>{branch ? `${branch.name} Branch` : 'Video call'} · {a.ref}</span>
-                  </div>
-                  <span className={`status status--${status}`}>{status[0].toUpperCase() + status.slice(1)}</span>
-                </div>
-                <div className="appt__when">
-                  <span className="pill"><Clock size={13} /> {whenLabel(a.dateKey, a.time)}</span>
-                  {branch ? <span className="pill"><MapPin size={13} /> {branch.name}</span> : <span className="pill"><Video size={13} /> Online</span>}
-                  {isUpcoming && branch && <span className="prio" style={{ alignSelf: 'center' }}>Priority Service</span>}
-                </div>
-                {isUpcoming && (
-                  <>
-                    <div className="appt__btns">
-                      {branch ? (
-                        <button className="btn" onClick={() => setQrFor(a)}>Show QR</button>
-                      ) : (
-                        <button className="btn" onClick={() => push({ name: 'call', topicId: a.serviceId, apptId: a.id })}><Video size={15} /> Join</button>
-                      )}
-                      <button className="btn btn--soft" onClick={() => reschedule(a)}><RefreshCw size={14} /> Reschedule</button>
-                    </div>
-                    <div className="appt__btns">
-                      {branch && (
-                        <a className="btn btn--soft" href={directionsUrl(branch)} target="_blank" rel="noreferrer" style={{ textDecoration: 'none' }}>
-                          <Navigation size={14} /> Directions
-                        </a>
-                      )}
-                      <button className="btn btn--soft" onClick={() => addToCalendar(a)}><CalendarPlus size={14} /> Calendar</button>
-                      <button className="btn btn--soft" style={{ color: 'var(--red)' }} onClick={() => setToCancel(a)}><CalendarX size={14} /> Cancel</button>
-                    </div>
-                  </>
-                )}
-              </section>
-            )
-          })}
+          {list.map((a) => (
+            <NavRow
+              key={a.id}
+              title={nameOf(a)}
+              desc={`${whenLabel(a.dateKey, a.time)} · ${placeOf(a)}${a.status === 'cancelled' ? ' · Cancelled' : ''}`}
+              onClick={upcoming.includes(a) ? () => setOpen(a) : undefined}
+              right={upcoming.includes(a) ? undefined : <span />}
+            />
+          ))}
         </div>
       </div>
 
-      <BottomSheet open={!!toCancel} onClose={() => setToCancel(null)} title="Cancel appointment?">
-        {toCancel && (
+      <BottomSheet open={!!open} onClose={close} title={open ? nameOf(open) : ''}>
+        {open && !confirmCancel && (
           <>
-            <p className="hint" style={{ marginBottom: 16 }}>
-              Your {whenLabel(toCancel.dateKey, toCancel.time)} slot will be released for other customers.
-            </p>
-            <div className="btn-row">
-              <button className="btn btn--soft" onClick={() => setToCancel(null)}>Keep it</button>
-              <button
-                className="btn btn--red"
-                onClick={() => {
-                  cancel(toCancel.id)
-                  setToCancel(null)
-                  toast('Appointment cancelled')
-                }}
-              >
-                Yes, cancel
-              </button>
+            {open.branchId && (
+              <div style={{ display: 'flex', justifyContent: 'center', margin: '4px 0 16px' }}>
+                <QRCodeSVG value={`EZYMEET:${open.ref}`} size={150} fgColor="#14136b" />
+              </div>
+            )}
+            <div className="details">
+              <div><span>When</span><b>{whenLabel(open.dateKey, open.time)}</b></div>
+              <div><span>{open.branchId ? 'Branch' : 'Mode'}</span><b>{placeOf(open)}</b></div>
+              <div><span>Reference</span><b>{open.ref}</b></div>
+            </div>
+            <div className="btn-col" style={{ marginTop: 16 }}>
+              {open.kind === 'virtual' && (
+                <button className="btn" onClick={() => { close(); push({ name: 'call', topicId: open.serviceId, apptId: open.id }) }}>Join Call</button>
+              )}
+              {open.branchId && (
+                <a className="btn" href={directionsUrl(getBranch(open.branchId)!)} target="_blank" rel="noreferrer">Get Directions</a>
+              )}
+              <div className="btn-row">
+                <button className="btn btn--light" onClick={() => reschedule(open)}>Reschedule</button>
+                <button className="btn btn--light" onClick={() => addToCalendar(open)}>Calendar</button>
+              </div>
+              <button className="btn btn--danger" onClick={() => setConfirmCancel(true)}>Cancel Appointment</button>
             </div>
           </>
         )}
-      </BottomSheet>
-
-      <BottomSheet open={!!qrFor} onClose={() => setQrFor(null)} title="Scan at the branch">
-        {qrFor && (
-          <div style={{ textAlign: 'center', paddingBottom: 8 }}>
-            <div className="ticket__qr" style={{ display: 'inline-block', padding: 12 }}>
-              <QRCodeSVG value={`EZYMEET:${qrFor.ref}`} size={200} fgColor="#1b1a5e" />
+        {open && confirmCancel && (
+          <>
+            <p className="context">Your {whenLabel(open.dateKey, open.time)} slot will be released for other customers.</p>
+            <div className="btn-row">
+              <button className="btn btn--light" onClick={() => setConfirmCancel(false)}>Keep</button>
+              <button
+                className="btn"
+                style={{ background: 'var(--red)' }}
+                onClick={() => {
+                  cancel(open.id)
+                  close()
+                  toast('Appointment cancelled')
+                }}
+              >
+                Cancel it
+              </button>
             </div>
-            <p style={{ marginTop: 12, fontWeight: 700, color: 'var(--navy)', letterSpacing: 1 }}>{qrFor.ref}</p>
-            <p className="hint">{whenLabel(qrFor.dateKey, qrFor.time)} · {getBranch(qrFor.branchId!)?.name} Branch</p>
-          </div>
+          </>
         )}
       </BottomSheet>
     </div>

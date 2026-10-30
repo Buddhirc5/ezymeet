@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Camera, Lock, Mic, MicOff, PhoneOff, Video, VideoOff, Volume2 } from 'lucide-react'
+import { Mic, MicOff, PhoneOff, Video, VideoOff, Volume2 } from 'lucide-react'
 import { useApp } from '../store'
 import { getTopic } from '../data/services'
 import advisorImg from '../assets/advisor.jpg'
@@ -61,28 +61,24 @@ export default function VideoCall({ topicId }: { topicId: string }) {
       {!connected && (
         <div className="call__connecting">
           <img src={advisorImg} alt="" />
-          <b>Connecting to an advisor…</b>
+          <b>Connecting…</b>
           <span>{topic?.name ?? 'Virtual Advisory'} · Pan Asia Bank</span>
         </div>
       )}
 
       <div className="call__top">
-        <div className="call__who">
-          <b>Nimali Perera</b>
-          <span>Virtual Advisor · {connected ? fmt(secs) : 'Calling…'}</span>
-        </div>
-        <span className="call__secure"><Lock size={11} /> Encrypted</span>
+        <b>Nimali Perera</b>
+        <span>Virtual Advisor · {connected ? fmt(secs) : 'Calling…'}</span>
       </div>
 
       {connected && (
         <div className="call__self">
-          {camOn ? <video ref={videoRef} autoPlay playsInline muted /> : <span><Camera size={20} style={{ display: 'block', margin: '0 auto 6px' }} />Tap camera<br />to show you</span>}
+          {camOn ? <video ref={videoRef} autoPlay playsInline muted /> : <span>Your camera is off</span>}
         </div>
       )}
 
       {connected && topicId === 'video-kyc' && (
         <div className="call__panel">
-          <b>Video KYC · Step 1 of 3</b>
           Please hold your National ID (front) up to the camera. Your advisor will guide you through the verification.
         </div>
       )}

@@ -4,6 +4,7 @@ import { DEFAULT_LOCATION } from './data/branches'
 export type Route =
   | { name: 'login' }
   | { name: 'home' }
+  | { name: 'menu' }
   | { name: 'meet'; tab?: 'branch' | 'virtual' }
   | { name: 'branch'; serviceId: string; rescheduleId?: string }
   | { name: 'slot'; serviceId: string; branchId: string; rescheduleId?: string }
@@ -80,7 +81,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const push = useCallback((r: Route) => setStack((s) => [...s, r]), [])
   const back = useCallback(() => setStack((s) => (s.length > 1 ? s.slice(0, -1) : s)), [])
   const replace = useCallback((r: Route) => setStack((s) => [...s.slice(0, -1), r]), [])
-  const reset = useCallback((r: Route) => setStack(r.name === 'home' ? [r] : [{ name: 'home' }, r]), [])
+  const reset = useCallback((r: Route) => setStack(r.name === 'home' || r.name === 'menu' || r.name === 'login' ? [r] : [{ name: 'home' }, r]), [])
 
   const toast = useCallback((msg: string) => {
     setToastMsg(msg)

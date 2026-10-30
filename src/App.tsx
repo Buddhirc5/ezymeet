@@ -3,6 +3,7 @@ import { AppProvider, useApp, type Route } from './store'
 import { StatusBar, Toast } from './components/ui'
 import Login from './screens/Login'
 import Home from './screens/Home'
+import Menu from './screens/Menu'
 import MeetHub from './screens/MeetHub'
 import BranchSelect from './screens/BranchSelect'
 import SlotSelect from './screens/SlotSelect'
@@ -16,6 +17,7 @@ function renderRoute(r: Route) {
   switch (r.name) {
     case 'login': return <Login />
     case 'home': return <Home />
+    case 'menu': return <Menu />
     case 'meet': return <MeetHub tab={r.tab} />
     case 'branch': return <BranchSelect serviceId={r.serviceId} rescheduleId={r.rescheduleId} />
     case 'slot': return <SlotSelect serviceId={r.serviceId} branchId={r.branchId} rescheduleId={r.rescheduleId} />
@@ -59,9 +61,9 @@ export default function App() {
       <main className="stage">
         <aside className="stage__intro">
           <img src={logo} alt="Pan Asia EZY" />
-          <h1>Pan Asia<br /><span>EZY Meet</span></h1>
+          <h1>Pan Asia EZY Meet</h1>
           <p>Smart branch visit scheduling and virtual advisory, inside the Pan Asia EZY mobile banking app.</p>
-          <p>Log in → tap <b>EZY Meet</b> → pick a service → book the recommended slot.</p>
+          <p>Log in → EZY Meet → pick a service → book the recommended slot.</p>
           <small>Prototype · designed for iPhone 15 Pro Max (430 × 932). Open on your phone for full screen.</small>
         </aside>
         <div className="device" style={zoom < 1 ? { zoom } : undefined}>
