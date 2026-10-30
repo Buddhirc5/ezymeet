@@ -4,10 +4,10 @@ import { upcomingAppointments, useApp, type Appointment } from '../store'
 import { BottomSheet, NavRow, ScreenHeader, Tabs } from '../components/ui'
 import { addToCalendar } from '../calendar'
 import { directionsUrl, getBranch } from '../data/branches'
-import { getService, getTopic } from '../data/services'
+import { getService } from '../data/services'
 import { whenLabel } from '../data/slots'
 
-const nameOf = (a: Appointment) => getService(a.serviceId)?.name ?? getTopic(a.serviceId)?.name ?? ''
+const nameOf = (a: Appointment) => getService(a.serviceId)?.name ?? ''
 const placeOf = (a: Appointment) => (a.branchId ? `${getBranch(a.branchId)?.name} Branch` : 'Video call')
 
 export default function Appointments() {

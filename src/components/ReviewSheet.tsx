@@ -1,7 +1,7 @@
 import { BottomSheet } from './ui'
 import { useApp } from '../store'
 import { getBranch } from '../data/branches'
-import { getService, getTopic } from '../data/services'
+import { getService } from '../data/services'
 import { whenLabel, type Slot } from '../data/slots'
 
 export interface Draft {
@@ -15,8 +15,7 @@ export interface Draft {
 
 export default function ReviewSheet({ draft, onClose, rescheduleId }: { draft: Draft | null; onClose: () => void; rescheduleId?: string }) {
   const { book, reset, toast } = useApp()
-  const service = draft?.kind === 'branch' ? getService(draft.serviceId) : undefined
-  const topic = draft?.kind === 'virtual' ? getTopic(draft.serviceId) : undefined
+  const service = draft ? getService(draft.serviceId) : undefined
   const branch = draft?.branchId ? getBranch(draft.branchId) : undefined
 
   const confirm = () => {
@@ -42,19 +41,19 @@ export default function ReviewSheet({ draft, onClose, rescheduleId }: { draft: D
       {draft && (
         <>
           <div className="details">
-            <div><span>{branch ? 'Service' : 'Call'}</span><b>{service?.name ?? topic?.name}</b></div>
+            <div><span>{branch ? 'Service' : 'Call'}</span><b>{service?.name}</b></div>
             <div><span>{branch ? 'Branch' : 'Mode'}</span><b>{branch ? branch.name : 'Video call'}</b></div>
             <div><span>When</span><b>{whenLabel(draft.dateKey, draft.slot.time)}</b></div>
             {branch ? (
               <div><span>Expected wait</span><b>{draft.slot.wait} min</b></div>
             ) : (
-              <div><span>Duration</span><b>~{topic?.duration} min</b></div>
+              <div><span>Duration</span><b>~{service?.tat} min</b></div>
             )}
             {draft.docs && <div><span>Documents</span><b>{draft.docs.length ? `${draft.docs.length} uploaded` : 'Share on the call'}</b></div>}
           </div>
 
           <p className="bring">
-            {service ? <>Bring: <b>{service.docs.join(', ')}</b></> : 'We will send a secure link. Join from the EZY app at your time.'}
+            {branch && service ? <>Bring: <b>{service.docs.join(', ')}</b></> : 'We will send a secure link. Join from the EZY app at your time.'}
           </p>
 
           <p className="terms">

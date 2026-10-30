@@ -4,7 +4,7 @@ import { useApp } from '../store'
 import { NavRow } from '../components/ui'
 import { addToCalendar } from '../calendar'
 import { directionsUrl, getBranch } from '../data/branches'
-import { getService, getTopic } from '../data/services'
+import { getService } from '../data/services'
 import { longDate, fmtTime } from '../data/slots'
 
 export default function Confirmation({ apptId, rescheduled }: { apptId: string; rescheduled?: boolean }) {
@@ -33,7 +33,7 @@ export default function Confirmation({ apptId, rescheduled }: { apptId: string; 
           </div>
 
           <div className="details">
-            <div><span>{branch ? 'Service' : 'Call'}</span><b>{getService(a.serviceId)?.name ?? getTopic(a.serviceId)?.name}</b></div>
+            <div><span>{branch ? 'Service' : 'Call'}</span><b>{getService(a.serviceId)?.name}</b></div>
             <div><span>{branch ? 'Branch' : 'Mode'}</span><b>{branch ? branch.name : 'Video call'}</b></div>
             {a.wait !== undefined && <div><span>Expected wait</span><b>{a.wait} min</b></div>}
           </div>

@@ -51,7 +51,7 @@ interface AppState {
 }
 
 const Ctx = createContext<AppState | null>(null)
-const STORAGE_KEY = 'ezymeet.appointments.v1'
+const STORAGE_KEY = 'ezymeet.appointments.v2'
 
 function load(): Appointment[] {
   try {

@@ -21,7 +21,7 @@ import {
 import { upcomingAppointments, useApp } from '../store'
 import { BottomNav, NavRow } from '../components/ui'
 import { getBranch } from '../data/branches'
-import { getService, getTopic } from '../data/services'
+import { getService } from '../data/services'
 import { whenLabel } from '../data/slots'
 
 export default function Home() {
@@ -93,7 +93,7 @@ export default function Home() {
               <NavRow
                 onClick={() => push({ name: 'appointments' })}
                 title={whenLabel(next.dateKey, next.time)}
-                desc={next.kind === 'virtual' ? `${getTopic(next.serviceId)?.name} · Video call` : `${getBranch(next.branchId!)?.name} Branch · ${getService(next.serviceId)?.name}`}
+                desc={next.kind === 'virtual' ? `${getService(next.serviceId)?.name} · Video call` : `${getBranch(next.branchId!)?.name} Branch · ${getService(next.serviceId)?.name}`}
                 right={next.kind === 'branch' ? <span className="tag">Priority Service</span> : undefined}
               />
             ) : (

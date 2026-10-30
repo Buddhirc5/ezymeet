@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Mic, MicOff, PhoneOff, Video, VideoOff, Volume2 } from 'lucide-react'
 import { useApp } from '../store'
-import { getTopic } from '../data/services'
+import { getService } from '../data/services'
 import advisorImg from '../assets/advisor.jpg'
 
 export default function VideoCall({ topicId }: { topicId: string }) {
   const { back, toast } = useApp()
-  const topic = getTopic(topicId)
+  const topic = getService(topicId)
   const [connected, setConnected] = useState(false)
   const [secs, setSecs] = useState(0)
   const [muted, setMuted] = useState(false)
@@ -62,7 +62,7 @@ export default function VideoCall({ topicId }: { topicId: string }) {
         <div className="call__connecting">
           <img src={advisorImg} alt="" />
           <b>Connecting…</b>
-          <span>{topic?.name ?? 'Virtual Advisory'} · Pan Asia Bank</span>
+          <span>{topic?.name ?? 'Virtual Advisory'}</span>
         </div>
       )}
 

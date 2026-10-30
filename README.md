@@ -22,11 +22,20 @@ Also included:
     investment, business and trade, card help, and relationship manager
   - In-call screen with camera preview, mute, and end call
 
-### Branch services
-General inquiries, account opening, card services, personal details/KYC update · bulk cash, cheque
-deposit & collection, cheque book, pay order / bank draft · balance confirmation letter, statements &
-certificates, document collection · personal & housing loans, leasing, pawning, fixed deposits, foreign
-currency & remittances · trade finance, business banking, SME loans · meet relationship / branch manager.
+### Services and channels
+
+Each service is offered on the channel that suits it:
+- **Branch only:** anything that needs cash, original documents, a signature, or a card or locker in person.
+  This covers cash and cheques, foreign currency, TT and drafts, RTGS, pay orders, gift vouchers, letters,
+  current and minor accounts, signature change, nominations, freeze and lien, closures, the safe deposit
+  locker, debit cards, pawning and credit facilities.
+- **Branch or video:** foreign currency accounts (PFCA/IIA/NRRA), personal details, dormant release,
+  credit cards, EZY activation, fund recall, loans and leasing, T-bills, bonds and REPO, trade and business,
+  and the relationship manager.
+- **Video only:** Video KYC.
+- **No visit needed:** savings and FD opening, FD upliftment, investment planner, cashback loan, cheque
+  book, stop cheque, LKR fund transfers, standing orders and e-statements are already self-service in the
+  EZY app. They are listed with where to find them, not offered as appointments.
 
 > Prototype only. Branch data, slots and waiting times are generated demo data. Bookings are saved in the
 > browser's localStorage.

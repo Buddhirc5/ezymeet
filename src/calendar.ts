@@ -1,16 +1,16 @@
 import type { Appointment } from './store'
 import { getBranch } from './data/branches'
-import { getService, getTopic } from './data/services'
+import { getService } from './data/services'
 
 const stamp = (d: Date) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')
 
 /** Download an .ics file — on iPhone Safari this opens "Add to Calendar". */
 export function addToCalendar(a: Appointment) {
   const start = new Date(`${a.dateKey}T${a.time}:00`)
-  const mins = a.kind === 'branch' ? getService(a.serviceId)?.tat ?? 30 : getTopic(a.serviceId)?.duration ?? 20
+  const mins = getService(a.serviceId)?.tat ?? 30
   const end = new Date(start.getTime() + Math.max(mins, 30) * 60000)
   const branch = a.branchId ? getBranch(a.branchId) : undefined
-  const title = a.kind === 'branch' ? `Pan Asia Bank – ${getService(a.serviceId)?.name}` : `Pan Asia EZY Meet – ${getTopic(a.serviceId)?.name} (video call)`
+  const title = a.kind === 'branch' ? `Pan Asia Bank – ${getService(a.serviceId)?.name}` : `Pan Asia EZY Meet – ${getService(a.serviceId)?.name} (video call)`
   const ics = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',

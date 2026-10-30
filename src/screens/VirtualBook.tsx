@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { ScreenHeader } from '../components/ui'
 import SlotPicker from '../components/SlotPicker'
 import ReviewSheet, { type Draft } from '../components/ReviewSheet'
-import { getTopic, KYC_DOCUMENTS } from '../data/services'
+import { getService, KYC_DOCUMENTS } from '../data/services'
 import { earliest, virtualSlots, type SlotRef } from '../data/slots'
 
 export default function VirtualBook({ topicId, rescheduleId }: { topicId: string; rescheduleId?: string }) {
-  const topic = getTopic(topicId)!
+  const topic = getService(topicId)!
   const [value, setValue] = useState<SlotRef | null>(() => earliest(virtualSlots))
   const [files, setFiles] = useState<Record<string, string>>({})
   const [draft, setDraft] = useState<Draft | null>(null)
@@ -17,7 +17,7 @@ export default function VirtualBook({ topicId, rescheduleId }: { topicId: string
       <ScreenHeader title={topic.name} />
       <div className="view__scroll">
         <div className="body">
-          <p className="context"><b>Video call</b> · ~{topic.duration} min with a Pan Asia advisor</p>
+          <p className="context"><b>Video call</b> · ~{topic.tat} min with a Pan Asia advisor</p>
           <SlotPicker slotsFor={virtualSlots} value={value} onChange={setValue} />
 
           {topic.needsDocs && (
