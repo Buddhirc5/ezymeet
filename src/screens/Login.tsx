@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BookOpen, Eye, EyeOff, Fingerprint, QrCode, ScanFace } from 'lucide-react'
 import { useApp } from '../store'
-import branchImg from '../assets/branch.jpg'
+import hqImg from '../assets/pab-hq.jpg'
 
 export default function Login() {
   const { reset, toast } = useApp()
@@ -14,7 +14,7 @@ export default function Login() {
     <div className="view">
       <div className="login">
         <div className="login__banner">
-          <img src={branchImg} alt="" />
+          <img src={hqImg} alt="Pan Asia Bank head office" />
           <div>
             <h2>WELCOME TO<br />PAN ASIA</h2>
             <strong>EZY</strong>

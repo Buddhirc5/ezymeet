@@ -21,6 +21,7 @@ export const SERVICE_CATEGORIES = [
   'Accounts',
   'Cards & Digital Banking',
   'Loans & Credit',
+  'Pawning',
   'Investments',
   'Business & Trade',
   'Meet Our Team',
@@ -33,18 +34,18 @@ const BV: Mode[] = ['branch', 'video']
 
 export const SERVICES: Service[] = [
   // Cash & Cheques — needs cash or original instruments, so branch only
-  { id: 'bulk-cash', name: 'Cash Deposit & Withdrawal', desc: 'Large cash transactions', category: 'Cash & Cheques', tat: 20, modes: B, docs: [NIC, 'Account number'] },
+  { id: 'bulk-cash', name: 'Cash Deposit & Withdrawal', desc: 'Large cash transactions', category: 'Cash & Cheques', tat: 10, modes: B, docs: [NIC, 'Account number'] },
   { id: 'cheque-encash', name: 'Cheque Encashment', desc: 'Cash a cheque over the counter', category: 'Cash & Cheques', tat: 10, modes: B, docs: [NIC, 'Cheque'] },
-  { id: 'cheque-purchase', name: 'Cheque Purchase', desc: 'Get funds before a cheque clears', category: 'Cash & Cheques', tat: 15, modes: B, docs: [NIC, 'Cheque'] },
+  { id: 'cheque-purchase', name: 'Cheque Purchase', desc: 'Get funds before a cheque clears', category: 'Cash & Cheques', tat: 10, modes: B, docs: [NIC, 'Cheque'] },
   { id: 'outward-cheques', name: 'Outward & Transfer Cheques', desc: 'Deposit or transfer cheques', category: 'Cash & Cheques', tat: 10, modes: B, docs: ['Cheque(s)', 'Account number'] },
 
   // Foreign currency & remittances
-  { id: 'fcy-deposit', name: 'Foreign Currency Deposit', desc: 'Deposit notes to an FCY account', category: 'Foreign Currency & Remittances', tat: 15, modes: B, docs: [NIC, 'Passport (if applicable)', 'Currency notes'] },
-  { id: 'fcy-issue', name: 'Buy Foreign Currency', desc: 'Currency notes for travel or study', category: 'Foreign Currency & Remittances', tat: 15, modes: B, docs: ['Passport', 'Air ticket / visa'] },
-  { id: 'fdraft-issue', name: 'Foreign Draft Issuance', desc: 'Issue a draft payable abroad', category: 'Foreign Currency & Remittances', tat: 20, modes: B, docs: [NIC, 'Payee details', 'Supporting invoice / letter'] },
-  { id: 'fdraft-collect', name: 'Foreign Draft Collection', desc: 'Deposit a draft received from abroad', category: 'Foreign Currency & Remittances', tat: 15, modes: B, docs: [NIC, 'Original draft'] },
-  { id: 'tt', name: 'Telegraphic Transfer (TT)', desc: 'Send money abroad by TT', category: 'Foreign Currency & Remittances', tat: 25, modes: B, docs: [NIC, 'Beneficiary bank details', 'Purpose documents'] },
-  { id: 'fcy-transfer', name: 'Foreign Currency Fund Transfer', desc: 'Transfers between FCY accounts', category: 'Foreign Currency & Remittances', tat: 20, modes: B, docs: [NIC, 'Beneficiary details'] },
+  { id: 'fcy-deposit', name: 'Foreign Currency Deposit', desc: 'Deposit notes to an FCY account', category: 'Foreign Currency & Remittances', tat: 10, modes: B, docs: [NIC, 'Passport (if applicable)', 'Currency notes'] },
+  { id: 'fcy-issue', name: 'Buy Foreign Currency', desc: 'Currency notes for travel or study', category: 'Foreign Currency & Remittances', tat: 10, modes: B, docs: ['Passport', 'Air ticket / visa'] },
+  { id: 'fdraft-issue', name: 'Foreign Draft Issuance', desc: 'Issue a draft payable abroad', category: 'Foreign Currency & Remittances', tat: 15, modes: B, docs: [NIC, 'Payee details', 'Supporting invoice / letter'] },
+  { id: 'fdraft-collect', name: 'Foreign Draft Collection', desc: 'Deposit a draft received from abroad', category: 'Foreign Currency & Remittances', tat: 10, modes: B, docs: [NIC, 'Original draft'] },
+  { id: 'tt', name: 'Telegraphic Transfer (TT)', desc: 'Send money abroad by TT', category: 'Foreign Currency & Remittances', tat: 15, modes: B, docs: [NIC, 'Beneficiary bank details', 'Purpose documents'] },
+  { id: 'fcy-transfer', name: 'Foreign Currency Fund Transfer', desc: 'Transfers between FCY accounts', category: 'Foreign Currency & Remittances', tat: 15, modes: B, docs: [NIC, 'Beneficiary details'] },
   { id: 'rtgs', name: 'RTGS Transfer', desc: 'High-value same-day transfers', category: 'Foreign Currency & Remittances', tat: 15, modes: B, docs: [NIC, 'Beneficiary bank & account'] },
 
   // Pay orders & letters
@@ -55,16 +56,16 @@ export const SERVICES: Service[] = [
   { id: 'certified-statement', name: 'Certified Bank Statement', desc: 'Signed & stamped statement', category: 'Pay Orders & Letters', tat: 15, modes: B, docs: [NIC] },
 
   // Accounts — everyday savings / FD opening is done in the app
-  { id: 'current-account', name: 'Current Account Opening', desc: 'Personal or business current account', category: 'Accounts', tat: 30, modes: B, docs: [NIC, 'Proof of address', 'Business registration (business)'] },
-  { id: 'minor-account', name: 'Minor Savings Account', desc: 'Open an account for your child', category: 'Accounts', tat: 20, modes: B, docs: ["Child's birth certificate", "Guardian's NIC"] },
-  { id: 'fcy-account', name: 'Foreign Currency Account', desc: 'PFCA, IIA or NRRA accounts', category: 'Accounts', tat: 25, modes: BV, needsDocs: true, docs: ['Passport', NIC, 'Proof of foreign income / residence'] },
+  { id: 'current-account', name: 'Current Account Opening', desc: 'Personal or business current account', category: 'Accounts', tat: 15, modes: B, docs: [NIC, 'Proof of address', 'Business registration (business)'] },
+  { id: 'minor-account', name: 'Minor Savings Account', desc: 'Open an account for your child', category: 'Accounts', tat: 15, modes: B, docs: ["Child's birth certificate", "Guardian's NIC"] },
+  { id: 'fcy-account', name: 'Foreign Currency Account', desc: 'PFCA, IIA or NRRA accounts', category: 'Accounts', tat: 15, modes: BV, needsDocs: true, docs: ['Passport', NIC, 'Proof of foreign income / residence'] },
   { id: 'personal-details', name: 'Update Personal Details', desc: 'Address, mobile number, name change', category: 'Accounts', tat: 10, modes: BV, needsDocs: true, docs: [NIC, 'Proof of new details'] },
   { id: 'dormant-release', name: 'Dormant Account Release', desc: 'Reactivate an inactive account', category: 'Accounts', tat: 15, modes: BV, needsDocs: true, docs: [NIC] },
   { id: 'signature-change', name: 'Signature Change', desc: 'Update your specimen signature', category: 'Accounts', tat: 15, modes: B, docs: [NIC] },
   { id: 'nominations', name: 'Nominations', desc: 'Add or change account nominees', category: 'Accounts', tat: 15, modes: B, docs: [NIC, "Nominee's NIC / birth certificate"] },
-  { id: 'freeze-lien', name: 'Account Freeze & Lien', desc: 'Place or release a freeze or lien', category: 'Accounts', tat: 20, modes: B, docs: [NIC, 'Request letter'] },
+  { id: 'freeze-lien', name: 'Account Freeze & Lien', desc: 'Place or release a freeze or lien', category: 'Accounts', tat: 10, modes: B, docs: [NIC, 'Request letter'] },
   { id: 'account-closure', name: 'Account Closure', desc: 'Close an account', category: 'Accounts', tat: 15, modes: B, docs: [NIC, 'Unused cheques & cards'] },
-  { id: 'locker', name: 'Safe Deposit Locker', desc: 'Rent, access or surrender a locker', category: 'Accounts', tat: 20, modes: B, docs: [NIC, 'Locker key (for access)'] },
+  { id: 'locker', name: 'Safe Deposit Locker', desc: 'Rent, access or surrender a locker', category: 'Accounts', tat: 30, modes: B, docs: [NIC, 'Locker key (for access)'] },
 
   // Cards & digital banking
   { id: 'debit-card', name: 'Debit Card Issuance', desc: 'New or replacement card & PIN', category: 'Cards & Digital Banking', tat: 15, modes: B, docs: [NIC] },
@@ -73,26 +74,31 @@ export const SERVICES: Service[] = [
   { id: 'fund-recall', name: 'Fund Recall & Bill Payment Reversal', desc: 'Wrong transfer or bill payment', category: 'Cards & Digital Banking', tat: 15, modes: BV, docs: [NIC, 'Transaction reference'] },
 
   // Loans & credit
-  { id: 'loans', name: 'Personal & Housing Loans', desc: 'Eligibility, rates and documents', category: 'Loans & Credit', tat: 40, modes: BV, docs: [NIC, 'Last 3 salary slips', 'Bank statements (6 months)'] },
+  { id: 'loans', name: 'Personal & Housing Loans', desc: 'Eligibility, rates and documents', category: 'Loans & Credit', tat: 30, modes: BV, docs: [NIC, 'Last 3 salary slips', 'Bank statements (6 months)'] },
   { id: 'leasing', name: 'Leasing', desc: 'Vehicle & equipment leasing', category: 'Loans & Credit', tat: 30, modes: BV, docs: [NIC, 'Vehicle quotation'] },
-  { id: 'pawning', name: 'Pawning', desc: 'Gold loans, redemption & renewal', category: 'Loans & Credit', tat: 20, modes: B, docs: [NIC, 'Gold articles / pawn ticket'] },
   { id: 'od-cash', name: 'Overdraft Against Deposits', desc: 'OD secured by cash or FD', category: 'Loans & Credit', tat: 25, modes: B, docs: [NIC, 'FD certificate'] },
-  { id: 'cash-margin', name: 'Cash Margin Facility', desc: 'Margin-backed credit facility', category: 'Loans & Credit', tat: 25, modes: B, docs: [NIC, 'Facility documents'] },
+  { id: 'cash-margin', name: 'Cash Margin Facility Services', desc: 'Margin-backed facility requests', category: 'Loans & Credit', tat: 25, modes: B, docs: [NIC, 'Facility documents'] },
   { id: 'credit-docs', name: 'Collect Credit Documents', desc: 'Offer letters, deeds, approvals', category: 'Loans & Credit', tat: 10, modes: B, docs: [NIC, 'Collection reference / SMS'] },
+
+  // Pawning — gold is handled in person, so branch only
+  { id: 'pawn-new', name: 'New Pawning (Gold Loan)', desc: 'Get an advance against gold articles', category: 'Pawning', tat: 20, modes: B, docs: [NIC, 'Gold articles'] },
+  { id: 'pawn-renew', name: 'Pawning Renewal', desc: 'Renew a pawning advance at maturity', category: 'Pawning', tat: 15, modes: B, docs: [NIC, 'Pawn ticket'] },
+  { id: 'pawn-topup', name: 'Top-up on Pawned Articles', desc: 'Extra advance on the same articles', category: 'Pawning', tat: 15, modes: B, docs: [NIC, 'Pawn ticket'] },
+  { id: 'pawn-redeem', name: 'Redemption of Pawned Articles', desc: 'Settle and collect your gold', category: 'Pawning', tat: 15, modes: B, docs: [NIC, 'Pawn ticket'] },
 
   // Investments
   { id: 'tbills', name: 'Treasury Bills, Bonds & REPO', desc: 'Government securities investments', category: 'Investments', tat: 20, modes: BV, docs: [NIC] },
 
   // Business & trade
-  { id: 'trade', name: 'Trade Finance', desc: 'LCs, guarantees, import / export bills', category: 'Business & Trade', tat: 45, modes: BV, docs: ['Business registration', 'Trade documents'] },
-  { id: 'business', name: 'Business Banking & SME Loans', desc: 'Facilities, payroll, working capital', category: 'Business & Trade', tat: 40, modes: BV, docs: ['Business registration', 'Financial statements'] },
+  { id: 'trade', name: 'Trade Finance', desc: 'LCs, guarantees, import / export bills', category: 'Business & Trade', tat: 30, modes: BV, docs: ['Business registration', 'Trade documents'] },
+  { id: 'business', name: 'Business Banking & SME Loans', desc: 'Facilities, payroll, working capital', category: 'Business & Trade', tat: 30, modes: BV, docs: ['Business registration', 'Financial statements'] },
 
   // Meet our team
   { id: 'rm', name: 'Relationship Manager', desc: 'Personalised advice & reviews', category: 'Meet Our Team', tat: 30, modes: BV, docs: [NIC] },
   { id: 'branch-manager', name: 'Branch Manager', desc: 'Escalations & special requests', category: 'Meet Our Team', tat: 30, modes: B, docs: [NIC] },
 
   // Video only
-  { id: 'video-kyc', name: 'Video KYC', desc: 'Become a customer without visiting a branch', category: 'Accounts', tat: 15, modes: V, needsDocs: true, docs: [NIC, 'Proof of address'] },
+  { id: 'video-kyc', name: 'Video KYC', desc: 'Become a customer without visiting a branch', category: 'Accounts', tat: 10, modes: V, needsDocs: true, docs: [NIC, 'Proof of address'] },
 ]
 
 export const KYC_DOCUMENTS = [
