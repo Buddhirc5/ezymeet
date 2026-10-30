@@ -33,12 +33,22 @@ Each service is offered on the channel that suits it:
   credit cards, EZY activation, fund recall, loans and leasing, T-bills, bonds and REPO, trade and business,
   and the relationship manager.
 - **Video only:** Video KYC.
-- **No visit needed:** savings and FD opening, FD upliftment, investment planner, cashback loan, cheque
-  book, stop cheque, LKR fund transfers, standing orders and e-statements are already self-service in the
-  EZY app. They are listed with where to find them, not offered as appointments.
+- **Not offered:** services the EZY app already handles on its own (savings and FD opening, FD upliftment,
+  investment planner, cashback loan, cheque book, stop cheque, LKR transfers, standing orders) are left out.
 
 > Prototype only. Branch data, slots and waiting times are generated demo data. Bookings are saved in the
 > browser's localStorage.
+
+## Branch portal
+
+Branch staff use **`/admin/`** (`https://buddhirc5.github.io/ezymeet/admin/`). The customer app has no link to it.
+- **Today:** the day's appointments with one-click Check in → Start → Complete, no-show, and customer details.
+- **Check-in:** scan the customer's QR code (camera) or type the reference; issues a priority token.
+- **Schedule:** a 7-day × 30-minute heat map of bookings.
+- **Video Desk:** scheduled video calls (Video KYC uploads shown) and the live "talk now" queue.
+- **Slots & Capacity:** set EZY Meet counters and block slots. Blocked slots disappear from the customer app.
+
+The portal reads bookings made in the customer app in the same browser, alongside generated demo bookings.
 
 ## Run locally
 

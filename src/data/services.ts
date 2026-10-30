@@ -95,19 +95,6 @@ export const SERVICES: Service[] = [
   { id: 'video-kyc', name: 'Video KYC', desc: 'Become a customer without visiting a branch', category: 'Accounts', tat: 15, modes: V, needsDocs: true, docs: [NIC, 'Proof of address'] },
 ]
 
-/** Already self-service in the EZY app (Menu → Service Requests), so no appointment is offered. */
-export const IN_APP = [
-  { name: 'Savings Account Opening', where: 'Service Requests → Account Services' },
-  { name: 'Fixed Deposit Opening & Upliftment', where: 'Service Requests → Account Services' },
-  { name: 'Investment Planner', where: 'Service Requests → Account Services' },
-  { name: 'Cashback Loan', where: 'Service Requests → Account Services' },
-  { name: 'Cheque Book Request', where: 'Service Requests → Account Services' },
-  { name: 'Stop Cheque Payment', where: 'Service Requests → Account Services' },
-  { name: 'Fund Transfers (LKR)', where: 'Home → Transfer Funds' },
-  { name: 'Standing Orders', where: 'Menu → Scheduled Transactions' },
-  { name: 'Bank Statements', where: 'Accounts → e-Statement' },
-]
-
 export const KYC_DOCUMENTS = [
   { id: 'nic-front', label: 'National ID (Front)' },
   { id: 'nic-back', label: 'National ID (Back)' },

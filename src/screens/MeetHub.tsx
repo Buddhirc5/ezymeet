@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
 import { upcomingAppointments, useApp } from '../store'
 import { NavRow, ScreenHeader, Tabs } from '../components/ui'
-import { IN_APP, SERVICE_CATEGORIES, getService, servicesFor, type Mode, type Service } from '../data/services'
+import { SERVICE_CATEGORIES, getService, servicesFor, type Mode, type Service } from '../data/services'
 import { liveAdvisors } from '../data/slots'
 
 const matches = (q: string, ...text: string[]) => text.join(' ').toLowerCase().includes(q)
@@ -30,7 +30,7 @@ export default function MeetHub({ tab: initialTab = 'branch' }: { tab?: 'branch'
 
 /** Searchable, grouped list of services for one channel. */
 function ServiceList({ mode }: { mode: Mode }) {
-  const { push, toast } = useApp()
+  const { push } = useApp()
   const [q, setQ] = useState('')
   const t = q.trim().toLowerCase()
 
@@ -38,7 +38,6 @@ function ServiceList({ mode }: { mode: Mode }) {
     () => servicesFor(mode).filter((s) => s.id !== 'video-kyc' && (!t || matches(t, s.name, s.desc))),
     [mode, t],
   )
-  const inApp = mode === 'branch' ? IN_APP.filter((s) => !t || matches(t, s.name)) : []
 
   const open = (s: Service) =>
     mode === 'branch' ? push({ name: 'branch', serviceId: s.id }) : push({ name: 'vbook', topicId: s.id })
@@ -69,16 +68,7 @@ function ServiceList({ mode }: { mode: Mode }) {
         )
       })}
 
-      {inApp.length > 0 && (
-        <>
-          <p className="group-label" style={{ marginTop: 30 }}>No visit needed — do it in the EZY app</p>
-          {inApp.map((s) => (
-            <NavRow key={s.name} title={s.name} desc={s.where} right={<span className="in-app">In app</span>} onClick={() => toast(`Opens ${s.where}`)} />
-          ))}
-        </>
-      )}
-
-      {!services.length && !inApp.length && <p className="empty">No services match “{q}”.</p>}
+      {!services.length && <p className="empty">No services match “{q}”.</p>}
     </>
   )
 }

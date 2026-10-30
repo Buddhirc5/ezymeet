@@ -60,7 +60,7 @@ export const whenLabel = (dateKey: string, time: string) => {
 
 // ---------- deterministic pseudo-random ----------
 
-function rand(seed: string) {
+export function rand(seed: string) {
   let h = 1779033703 ^ seed.length
   for (let i = 0; i < seed.length; i++) {
     h = Math.imul(h ^ seed.charCodeAt(i), 3432918353)
@@ -103,9 +103,19 @@ function buildSlots(
   return out
 }
 
+/** Slots a branch has blocked in the branch portal (shared browser storage on this device). */
+function blockedSlots(): Record<string, true> {
+  try {
+    return JSON.parse(localStorage.getItem('ezymeet.portal.v1') ?? '{}').blocked ?? {}
+  } catch {
+    return {}
+  }
+}
+
 export function branchSlots(branch: Branch, dateKey: string, now = new Date()) {
   // Mon–Fri 9:00–15:30, Sat 9:00–12:30, Sun closed
-  return buildSlots(branch.id, branch.load, dateKey, hoursFor(dateKey, [9 * 60, 15 * 60 + 30], [9 * 60, 12 * 60 + 30]), 30, now)
+  const blocked = blockedSlots()
+  return buildSlots(branch.id, branch.load, dateKey, hoursFor(dateKey, [9 * 60, 15 * 60 + 30], [9 * 60, 12 * 60 + 30]), 30, now).map((sl) => (blocked[`${branch.id}|${dateKey}|${sl.time}`] ? { ...sl, available: false } : sl))
 }
 
 export function virtualSlots(dateKey: string, now = new Date()) {
